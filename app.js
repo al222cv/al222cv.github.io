@@ -1,5 +1,5 @@
 var app = angular.module('pingpong', ['ngMaterial']);
-var remoteDb = new PouchDB('https://user@larchii.cloudant.com/dailypingpong');
+var remoteDb = new PouchDB('https://larchii:Johanw12@larchii.cloudant.com/dailypingpong');
 
 app.factory('$eventStore', function(){
 	return {
