@@ -27,9 +27,19 @@
 		}
 
 		.gravatar{
-			width: 100px;
-			height: 100px;
+			width: 90px;
+			height: 90px;
 			border-radius: 50%;
+		}
+
+		@media (max-width:480px) { 
+			.gravatar{
+				width: 70px;
+				height: 70px;
+			}
+			.score{
+				font-size: 24px;
+			}
 		}
 
 		.md-caption{
@@ -64,7 +74,7 @@
 								<p class="text-center">Andreas</p>
 							</div>
 							
-							<div class="text-center md-display-2" flex>
+							<div class="score text-center md-display-1" flex>
 								{{stats.scores[0].score}} - {{stats.scores[1].score}}
 							</div>
 
