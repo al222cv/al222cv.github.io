@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html ng-app="pingpong">
+<head>
+	<title>Andreas vs Mikael</title>
+
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="viewport" content="width=device-width,height=device-height, initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+
+	<link rel="stylesheet" type="text/css" href="bower_components/angular-material/angular-material.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+	<script src="http://cdn.jsdelivr.net/pouchdb/4.0.3/pouchdb.min.js"></script>
+	<script type="text/javascript" src="angular.min.js"></script>
+	<script type="text/javascript" src="angular-animate.min.js"></script>
+	<script type="text/javascript" src="angular-aria.min.js"></script>
+	<script type="text/javascript" src="angular-material.min.js"></script>
+	<script type="text/javascript" src="app.js"></script>
+
+	<style type="text/css">
+		#main-content{
+			background-color: #ECECEC;	
+		}
+
+		.text-center{
+			text-align: center;
+		}
+
+		.gravatar{
+			width: 100px;
+			height: 100px;
+			border-radius: 50%;
+		}
+
+		.md-caption{
+			color: rgba(0,0,0,0.6);
+		}
+	</style>
+</head>
+
+<body layout="row" class="ng-cloak">
+
+	<div id="wrapper" layout="column" flex>
+		<md-toolbar class="md-whiteframe-z2">
+			<div class="md-toolbar-tools">
+			<!-- 	<md-button hide-gt-md class="md-icon-button" toggle-sidenav-left-button aria-label="Menu">
+					<md-icon md-font-set="material-icons">menu</md-icon>
+				</md-button> -->
+
+				<h2>Andreas vs Mikael</h2>
+			</div>
+		</md-toolbar>
+
+		<md-content id="main-content" flex>
+			<div ng-controller="MatchCtrl" style="max-width: 600px; margin: auto;">
+				<md-card>
+					<md-card-content>
+						<p class="md-caption">Senaste match: tis 10 okt, kl 14:03</p>
+						
+						<div layout="row" layout-align="space-around center">
+							
+							<div class="player">
+								<img class="gravatar md-whiteframe-z2" src="http://www.gravatar.com/avatar/0271e6aa0d5d00e75e03ae4e86fe84a8.?s=220&amp;d=identicon">
+								<p class="text-center">Andreas</p>
+							</div>
+							
+							<div class="text-center md-display-2" flex>
+								{{stats.scores[0].score}} - {{stats.scores[1].score}}
+							</div>
+
+							<div class="player">
+								<img class="gravatar md-whiteframe-z2" src="http://www.gravatar.com/avatar/89fa409841291104b3d9e10652661463.?s=220&amp;		d=identicon">
+								<p class="text-center">Mikael</p>
+							</div>
+
+						</div>
+					</md-card-content>
+					<md-divider></md-divider>
+					<div class="md-actions" layout="row">
+   						<md-button class="md-accent" ng-click="newMatch('Andreas')">Andreas vinnare </md-button>
+   						<p flex class="text-center">Ny match</p>
+   						<md-button class="md-accent" ng-click="newMatch('Mikael')">Mikael vinnare</md-button>
+ 					</div>
+				</md-card>
+			</div>
+		</md-content>
+    </div>
+
+</body>
+
+</html>
