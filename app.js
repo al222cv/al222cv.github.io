@@ -34,6 +34,7 @@ app.controller('MatchCtrl', function($scope, $mdToast, $eventStore){
 		.then(function(doc){
 			doc.scores[0].score += change.doc.winner == 'Andreas' ? 1 : 0;
 			doc.scores[1].score += change.doc.winner == 'Mikael' ? 1 : 0;
+			doc.latestMatch = change.doc.metadata.date;
 			
 			remoteDb.put(doc);
 
@@ -51,7 +52,8 @@ app.controller('MatchCtrl', function($scope, $mdToast, $eventStore){
 		 		},{
 		 			player: 'Mikael',
 		 			score: change.doc.winner == 'Mikael' ? 1 : 0
-		 		}]
+		 		}],
+		 		latestMatch: change.doc.metadata.date
 		 	};
 
 		 	remoteDb.put(scoreReadData);

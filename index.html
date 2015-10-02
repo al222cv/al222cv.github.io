@@ -65,7 +65,7 @@
 			<div ng-controller="MatchCtrl" style="max-width: 600px; margin: auto;">
 				<md-card>
 					<md-card-content>
-						<p class="md-caption">Senaste match: tis 10 okt, kl 14:03</p>
+						<p class="md-caption">Senaste match: {{stats.latestMatch | date:'EEE dd MMMM, HH:mm'}}</p>
 						
 						<div layout="row" layout-align="space-around center">
 							
