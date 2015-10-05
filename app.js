@@ -21,7 +21,9 @@ app.factory('$eventStore', function(){
 
 app.controller('MatchCtrl', function($scope, $mdToast, $eventStore){
 	var initalScore = 6;
-	$scope.stats = { home: null, away: null };
+	var localStats = localStorage.getItem('stats');
+	$scope.stats =  localStats ? JSON.parse(localStats) : { home: null, away: null };
+	
 	setScore();
 	setLatestMatch();
 
@@ -66,12 +68,14 @@ app.controller('MatchCtrl', function($scope, $mdToast, $eventStore){
 		remoteDb.query('sumByWinner',{key: 'Andreas',reduce: true}).then(function(data){
 			$scope.$apply(function(){
 				$scope.stats.home = data.rows[0].value + initalScore;
+				localStorage.setItem('stats', JSON.stringify($scope.stats));
 			});
 		});
 
 		remoteDb.query('sumByWinner',{key: 'Mikael',reduce: true}).then(function(data){
 			$scope.$apply(function(){
 				$scope.stats.away = data.rows[0].value;
+				localStorage.setItem('stats', JSON.stringify($scope.stats));
 			});
 		});
 	}
@@ -80,7 +84,8 @@ app.controller('MatchCtrl', function($scope, $mdToast, $eventStore){
 		remoteDb.query('latestMatch', { limit: 1, descending: true })
 		.then(function(data){
 			$scope.$apply(function(){
-				$scope.stats.latestMatch = data.rows[0].key;			
+				$scope.stats.latestMatch = data.rows[0].key;
+				localStorage.setItem('stats', JSON.stringify($scope.stats));
 			});
 		});
 	}
