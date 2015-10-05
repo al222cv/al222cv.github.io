@@ -20,12 +20,10 @@ app.factory('$eventStore', function(){
 });
 
 app.controller('MatchCtrl', function($scope, $mdToast, $eventStore){
-	//get score
-	remoteDb.get('scoreReadData')
-	.then(function(doc){
-		$scope.stats = doc;
-		$scope.$apply();
-	});
+	var initalScore = 6;
+	$scope.stats = { home: null, away: null };
+	setScore();
+	setLatestMatch();
 
 	//listen to matchedPlayedEvents and update result!
 	remoteDb.changes({
@@ -34,37 +32,9 @@ app.controller('MatchCtrl', function($scope, $mdToast, $eventStore){
 	  include_docs: true
 	}).on('change', function(change) {
 		if(change.doc.type != 'matchPlayedEvent') return;
-		
-		remoteDb.get('scoreReadData')
-		.then(function(doc){
-			doc.scores[0].score += change.doc.winner == 'Andreas' ? 1 : 0;
-			doc.scores[1].score += change.doc.winner == 'Mikael' ? 1 : 0;
-			doc.latestMatch = change.doc.metadata.date;
-			
-			remoteDb.put(doc);
 
-			$scope.stats = doc;
-			$scope.$apply();
-
-			console.log('in Success readdata');
-		}).catch(function (err) {
-			console.log('in error readdata');
-		 	var scoreReadData = {
-		 		_id: 'scoreReadData',
-		 		scores: [{
-		 			player: 'Andreas',
-		 			score: change.doc.winner == 'Andreas' ? 1 : 0
-		 		},{
-		 			player: 'Mikael',
-		 			score: change.doc.winner == 'Mikael' ? 1 : 0
-		 		}],
-		 		latestMatch: change.doc.metadata.date
-		 	};
-
-		 	remoteDb.put(scoreReadData);
-		 	$scope.stats = scoreReadData;
-		 	$scope.$apply();
-		});
+		setScore();
+		setLatestMatch();
 	});
 
 	$scope.newMatch = function(player){
@@ -92,4 +62,26 @@ app.controller('MatchCtrl', function($scope, $mdToast, $eventStore){
 		});
 	};
 
+	function setScore(){
+		remoteDb.query('sumByWinner',{key: 'Andreas',reduce: true}).then(function(data){
+			$scope.$apply(function(){
+				$scope.stats.home = data.rows[0].value + initalScore;
+			});
+		});
+
+		remoteDb.query('sumByWinner',{key: 'Mikael',reduce: true}).then(function(data){
+			$scope.$apply(function(){
+				$scope.stats.away = data.rows[0].value;
+			});
+		});
+	}
+
+	function setLatestMatch(){
+		remoteDb.query('latestMatch', { limit: 1, descending: true })
+		.then(function(data){
+			$scope.$apply(function(){
+				$scope.stats.latestMatch = data.rows[0].key;			
+			});
+		});
+	}
 });
