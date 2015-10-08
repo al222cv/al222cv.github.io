@@ -81,10 +81,14 @@ app.controller('MatchCtrl', function($scope, $mdToast, $eventStore){
 	}
 
 	function setLatestMatch(){
-		remoteDb.query('latestMatch', { limit: 1, descending: true })
+		remoteDb.query('latestMatch', { limit: 20, descending: true, include_docs: true })
 		.then(function(data){
 			$scope.$apply(function(){
 				$scope.stats.latestMatch = data.rows[0].key;
+				$scope.latestMatches = data.rows;
+
+				console.log($scope.latestMatches);
+
 				localStorage.setItem('stats', JSON.stringify($scope.stats));
 			});
 		});

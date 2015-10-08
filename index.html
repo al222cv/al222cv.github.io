@@ -45,6 +45,12 @@
 			}
 		}
 
+		.md-body-2{
+			line-height: 0;
+			margin-top: 40px;
+			color: rgba(0,0,0,0.6);
+			margin-left: 8px;
+		}
 		.md-caption{
 			color: rgba(0,0,0,0.6);
 		}
@@ -82,7 +88,7 @@
 							</div>
 
 							<div class="player">
-								<img class="gravatar md-whiteframe-z2" src="http://www.gravatar.com/avatar/89fa409841291104b3d9e10652661463.?s=220&amp;		d=identicon">
+								<img class="gravatar md-whiteframe-z2" src="http://www.gravatar.com/avatar/89fa409841291104b3d9e10652661463.?s=220&amp;d=identicon">
 								<p class="text-center">Mikael</p>
 							</div>
 
@@ -95,8 +101,25 @@
    						<md-button class="md-accent" ng-click="newMatch('Mikael')">Mikael vinnare</md-button>
  					</div>
 				</md-card>
+
+				<h4 class="md-body-2">20 senaste matcherna</h4>
+				<md-card>
+					<md-card-content>
+						<md-list>
+							<md-list-item class="md-2-line" ng-repeat="match in latestMatches">
+						      	<img ng-if="match.doc.winner == 'Andreas'" src="http://www.gravatar.com/avatar/0271e6aa0d5d00e75e03ae4e86fe84a8.?s=220&amp;d=identicon" class="md-avatar">
+						      	<img ng-if="match.doc.winner == 'Mikael'" src="http://www.gravatar.com/avatar/89fa409841291104b3d9e10652661463.?s=220&amp;d=identicon" class="md-avatar">
+						        <div class="md-list-item-text">
+						          <h3>{{ match.doc.winner }}</h3>
+						          <p>{{match.doc._id | date:'EEE dd MMMM, HH:mm'}}</p>
+						        </div>
+						    </md-list-item>
+						</md-list>
+					</md-card-content>
+				</md-card>
 			</div>
 		</md-content>
+
     </div>
 
 </body>
