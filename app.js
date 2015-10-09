@@ -20,7 +20,6 @@ app.factory('$eventStore', function(){
 });
 
 app.controller('MatchCtrl', function($scope, $mdToast, $eventStore){
-	var initalScore = 6;
 	var localStats = localStorage.getItem('stats');
 	$scope.stats =  localStats ? JSON.parse(localStats) : { home: null, away: null };
 	
@@ -67,7 +66,7 @@ app.controller('MatchCtrl', function($scope, $mdToast, $eventStore){
 	function setScore(){
 		remoteDb.query('sumByWinner',{key: 'Andreas',reduce: true}).then(function(data){
 			$scope.$apply(function(){
-				$scope.stats.home = data.rows[0].value + initalScore;
+				$scope.stats.home = data.rows[0].value;
 				localStorage.setItem('stats', JSON.stringify($scope.stats));
 			});
 		});
