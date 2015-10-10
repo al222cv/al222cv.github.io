@@ -63,6 +63,10 @@ app.controller('MatchCtrl', function($scope, $mdToast, $eventStore){
 		});
 	};
 
+	$scope.range = function(n) {
+        return new Array(n);
+    };
+
 	function setScore(){
 		remoteDb.query('sumByWinner',{key: 'Andreas',reduce: true}).then(function(data){
 			$scope.$apply(function(){
@@ -83,12 +87,12 @@ app.controller('MatchCtrl', function($scope, $mdToast, $eventStore){
 		remoteDb.query('latestMatch', { limit: 20, descending: true, include_docs: true })
 		.then(function(data){
 			$scope.$apply(function(){
-				$scope.stats.latestMatch = data.rows[0].key;
 				$scope.latestMatches = data.rows;
-
-				console.log($scope.latestMatches);
-
-				localStorage.setItem('stats', JSON.stringify($scope.stats));
+				$scope.fiveLatestMatches = data.rows.slice(0,5).reverse();
+				// $scope.fiveLatestMatches = [
+				// 	{ count: latestFive.filter(function(m){ return m.doc.winner == 'Andreas' }).length },
+				// 	{ count: latestFive.filter(function(m){ return m.doc.winner == 'Mikael' }).length }
+				// ]				
 			});
 		});
 	}

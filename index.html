@@ -22,7 +22,7 @@
 
 	<style type="text/css">
 		#main-content{
-			background-color: #ECECEC;	
+			background-color: #ECECEC;
 		}
 
 		.text-center{
@@ -45,14 +45,43 @@
 			}
 		}
 
+		.grey{
+			color: rgba(0,0,0,0.6)
+		}
+
 		.md-body-2{
 			line-height: 0;
 			margin-top: 40px;
-			color: rgba(0,0,0,0.6);
 			margin-left: 8px;
 		}
-		.md-caption{
-			color: rgba(0,0,0,0.6);
+		
+		md-icon.green{
+			color: #2BAF2B;
+		}
+		md-icon.green:after{
+			content: 'W';
+		    font-family: Roboto, 'Helvetica Neue', sans-serif;
+		    font-size: 10px;
+		    color: white;
+		    position: relative;
+		    top: -16px;
+		    left: 7.5px;
+		    display: block;
+		    text-align: left;
+		}
+		.red{
+			color: #E53935;
+		}
+		.red:after{
+			content: 'L';
+		    font-family: Roboto, 'Helvetica Neue', sans-serif;
+		    font-size: 10px;
+		    color: white;
+		    position: relative;
+		    top: -16px;
+		    left: 9px;
+		    display: block;
+		    text-align: left;
 		}
 	</style>
 </head>
@@ -71,10 +100,10 @@
 		</md-toolbar>
 
 		<md-content id="main-content" flex>
-			<div ng-controller="MatchCtrl" style="max-width: 600px; margin: auto;">
+			<div ng-controller="MatchCtrl" style="max-width: 600px; margin: 20px auto;">
 				<md-card>
 					<md-card-content>
-						<p class="md-caption">Senaste match: {{stats.latestMatch | date:'EEE dd MMMM, HH:mm'}}</p>
+						<!-- <p class="md-caption">Senaste match: {{stats.latestMatch | date:'EEE dd MMMM, HH:mm'}}</p> -->
 						
 						<div layout="row" layout-align="space-around center">
 							
@@ -95,6 +124,19 @@
 						</div>
 					</md-card-content>
 					<md-divider></md-divider>
+					<md-card-content>
+						<h4 class="md-body-1 grey" style="margin-top: 0;">5 senaste matcherna</h4>
+						<div layout="row">
+							<div flex>
+								<md-icon ng-class="{green: m.doc.winner == 'Andreas', red: m.doc.winner != 'Andreas'}" ng-repeat="m in fiveLatestMatches track by $index"> lens </md-icon>
+							</div>
+							<div flex style="text-align: right;">
+								<md-icon ng-class="{green: m.doc.winner == 'Mikael', red: m.doc.winner != 'Mikael'}" ng-repeat="m in fiveLatestMatches track by $index"> lens </md-icon>
+								<!-- <span class="winner-ball" ng-repeat="a in range(fiveLatestMatches[1].count) track by $index">W</span> -->
+							</div>
+						</div>
+					</md-card-content>
+					<md-divider></md-divider>
 					<div class="md-actions" layout="row">
    						<md-button class="md-accent" ng-click="newMatch('Andreas')">Andreas vinnare </md-button>
    						<p flex class="text-center">Ny match</p>
@@ -102,7 +144,7 @@
  					</div>
 				</md-card>
 
-				<h4 class="md-body-2">20 senaste matcherna</h4>
+				<h4 class="md-body-2 grey">20 senaste matcherna</h4>
 				<md-card>
 					<md-card-content>
 						<md-list>
@@ -110,8 +152,8 @@
 						      	<img ng-if="match.doc.winner == 'Andreas'" src="http://www.gravatar.com/avatar/0271e6aa0d5d00e75e03ae4e86fe84a8.?s=220&amp;d=identicon" class="md-avatar">
 						      	<img ng-if="match.doc.winner == 'Mikael'" src="http://www.gravatar.com/avatar/89fa409841291104b3d9e10652661463.?s=220&amp;d=identicon" class="md-avatar">
 						        <div class="md-list-item-text">
-						          <h3>{{ match.doc.winner }}</h3>
-						          <p>{{match.doc._id | date:'EEE dd MMMM, HH:mm'}}</p>
+						          <h3>{{::match.doc.winner }}</h3>
+						          <p>{{::match.doc._id | date:'EEE dd MMMM, HH:mm'}}</p>
 						        </div>
 						    </md-list-item>
 						</md-list>
