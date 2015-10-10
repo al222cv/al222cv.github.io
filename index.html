@@ -99,6 +99,8 @@
 			</div>
 		</md-toolbar>
 
+		<md-progress-linear md-mode="{{loadingMode}}"></md-progress-linear>
+
 		<md-content id="main-content" flex>
 			<div ng-controller="MatchCtrl" style="max-width: 600px; margin: 20px auto;">
 				<md-card>
@@ -144,16 +146,17 @@
  					</div>
 				</md-card>
 
-				<h4 class="md-body-2 grey">20 senaste matcherna</h4>
+				<h4 class="md-body-2 grey">Senaste matcherna (visar {{latestMatches.length}} av {{totalMatches}})</h4>
 				<md-card>
 					<md-card-content>
 						<md-list>
-							<md-list-item class="md-2-line" ng-repeat="match in latestMatches">
+							<md-list-item class="md-3-line" ng-repeat="match in latestMatches">
 						      	<img ng-if="match.doc.winner == 'Andreas'" src="http://www.gravatar.com/avatar/0271e6aa0d5d00e75e03ae4e86fe84a8.?s=220&amp;d=identicon" class="md-avatar">
 						      	<img ng-if="match.doc.winner == 'Mikael'" src="http://www.gravatar.com/avatar/89fa409841291104b3d9e10652661463.?s=220&amp;d=identicon" class="md-avatar">
 						        <div class="md-list-item-text">
 						          <h3>{{::match.doc.winner }}</h3>
-						          <p>{{::match.doc._id | date:'EEE dd MMMM, HH:mm'}}</p>
+						          <h4>{{::match.doc._id | date:'EEE dd MMMM, HH:mm'}}</h4>
+						          <p>Match {{totalMatches - $index}}</p>
 						        </div>
 						        <md-menu md-position-mode="target-right target" >
 						          <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
@@ -173,6 +176,10 @@
 						    </md-list-item>
 						</md-list>
 					</md-card-content>
+					<md-divider></md-divider>
+					<div class="md-actions" layout layout-align="center center" ng-show="showLoadMoreButton">
+						<md-button ng-click="loadMoreMatches()" class="grey">Ladda fler matcher</md-button>
+					</div>
 				</md-card>
 			</div>
 		</md-content>

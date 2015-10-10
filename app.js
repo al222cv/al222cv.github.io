@@ -20,11 +20,19 @@ app.factory('$eventStore', function(){
 });
 
 app.controller('MatchCtrl', function($scope, $mdToast, $eventStore){
+	//init
 	var localStats = localStorage.getItem('stats');
+	var localFiveLatestMatches = localStorage.getItem('fiveLatestMatches');
+	var pageLimit = 5;
+	var pageSkip = 0;
+
 	$scope.stats =  localStats ? JSON.parse(localStats) : { home: null, away: null };
+	$scope.fiveLatestMatches = localFiveLatestMatches ? JSON.parse(localFiveLatestMatches) : null;
+	$scope.latestMatches = localFiveLatestMatches ? JSON.parse(localFiveLatestMatches).reverse() : [];
+	$scope.totalMatches = localStorage.getItem('totalMatches');
 	
 	setScore();
-	setLatestMatch();
+	setLatestMatch(true);
 
 	//listen to matchedPlayedEvents and update result!
 	remoteDb.changes({
@@ -34,7 +42,7 @@ app.controller('MatchCtrl', function($scope, $mdToast, $eventStore){
 	}).on('change', function(change) {
 		//reload score
 		setScore();
-		setLatestMatch();
+		setLatestMatch(true);
 
 		//show message
 		var message =  change.deleted ? 'Match borttagen!' : 'Match sparad, ' +  change.doc.winner  + ' vinnare!'
@@ -60,6 +68,10 @@ app.controller('MatchCtrl', function($scope, $mdToast, $eventStore){
 		remoteDb.remove(doc);
 	};
 
+	$scope.loadMoreMatches = function(){
+		setLatestMatch();
+	}
+
 	function setScore(){
 		remoteDb.query('sumByWinner',{key: 'Andreas',reduce: true}).then(function(data){
 			$scope.$apply(function(){
@@ -76,12 +88,31 @@ app.controller('MatchCtrl', function($scope, $mdToast, $eventStore){
 		});
 	}
 
-	function setLatestMatch(){
-		remoteDb.query('latestMatch', { limit: 20, descending: true, include_docs: true })
+	function setLatestMatch(reset){
+		if(reset){
+			pageLimit = $scope.latestMatches.length || pageLimit; // : $scope.latestMatches.length;
+			pageSkip = 0;
+		}
+
+		remoteDb.query('latestMatch', { limit: pageLimit, skip: pageSkip, descending: true, include_docs: true })
 		.then(function(data){
+			pageSkip += pageLimit;
+
+			if(reset){
+				$scope.latestMatches = [];
+			}
+
 			$scope.$apply(function(){
-				$scope.latestMatches = data.rows;
-				$scope.fiveLatestMatches = data.rows.slice(0,5).reverse();
+				$scope.latestMatches.push.apply($scope.latestMatches, data.rows);
+				$scope.totalMatches = data.total_rows;
+				$scope.showLoadMoreButton = data.total_rows > $scope.latestMatches.length;
+
+				localStorage.setItem('totalMatches', data.total_rows);
+				if(reset){
+					var fiveLatestMatches = data.rows.slice(0,5).reverse();
+					$scope.fiveLatestMatches = fiveLatestMatches;
+					localStorage.setItem('fiveLatestMatches', JSON.stringify(fiveLatestMatches));
+				}
 			});
 		});
 	}
