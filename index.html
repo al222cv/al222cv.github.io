@@ -91,15 +91,9 @@
 	<div id="wrapper" layout="column" flex>
 		<md-toolbar class="md-whiteframe-z2">
 			<div class="md-toolbar-tools">
-			<!-- 	<md-button hide-gt-md class="md-icon-button" toggle-sidenav-left-button aria-label="Menu">
-					<md-icon md-font-set="material-icons">menu</md-icon>
-				</md-button> -->
-
 				<h2>Andreas vs Mikael</h2>
 			</div>
 		</md-toolbar>
-
-		<md-progress-linear md-mode="{{loadingMode}}"></md-progress-linear>
 
 		<md-content id="main-content" flex>
 			<div ng-controller="MatchCtrl" style="max-width: 600px; margin: 20px auto;">
@@ -111,7 +105,7 @@
 							
 							<div class="player">
 								<img class="gravatar md-whiteframe-z2" src="http://www.gravatar.com/avatar/0271e6aa0d5d00e75e03ae4e86fe84a8.?s=220&amp;d=identicon">
-								<p class="text-center">Andreas</p>
+								<p class="text-center">Andreas {{isLoading}}</p>
 							</div>
 							
 							<div class="score text-center md-display-1" flex>
@@ -140,9 +134,9 @@
 					</md-card-content>
 					<md-divider></md-divider>
 					<div class="md-actions" layout="row">
-   						<md-button class="md-accent" ng-click="newMatch('Andreas')">Andreas vinnare </md-button>
+   						<md-button class="md-primary" ng-click="newMatch('Andreas')">Andreas vinnare </md-button>
    						<p flex class="text-center">Ny match</p>
-   						<md-button class="md-accent" ng-click="newMatch('Mikael')">Mikael vinnare</md-button>
+   						<md-button class="md-primary" ng-click="newMatch('Mikael')">Mikael vinnare</md-button>
  					</div>
 				</md-card>
 

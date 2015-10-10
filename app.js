@@ -6,6 +6,12 @@ var remoteDb = new PouchDB('https://larchii.cloudant.com/dailypingpong', {
 	}
 });
 
+app.config(function($mdThemingProvider){
+	$mdThemingProvider.theme('default')
+   .primaryPalette('deep-purple')
+   .accentPalette('red');
+});
+
 app.factory('$eventStore', function(){
 	return {
 		save: function(eventName, data){
@@ -104,9 +110,9 @@ app.controller('MatchCtrl', function($scope, $mdToast, $eventStore){
 
 			$scope.$apply(function(){
 				$scope.latestMatches.push.apply($scope.latestMatches, data.rows);
-				console.log($scope.latestMatches);
 				$scope.totalMatches = data.total_rows;
 				$scope.showLoadMoreButton = data.total_rows > $scope.latestMatches.length;
+				// $scope.isLoading = false;
 
 				localStorage.setItem('totalMatches', data.total_rows);
 				if(reset){
