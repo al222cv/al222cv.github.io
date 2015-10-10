@@ -23,7 +23,7 @@ app.controller('MatchCtrl', function($scope, $mdToast, $eventStore){
 	//init
 	var localStats = localStorage.getItem('stats');
 	var localFiveLatestMatches = localStorage.getItem('fiveLatestMatches');
-	var pageLimit = 5;
+	var pageLimit = 20;
 	var pageSkip = 0;
 
 	$scope.stats =  localStats ? JSON.parse(localStats) : { home: null, away: null };
@@ -90,7 +90,7 @@ app.controller('MatchCtrl', function($scope, $mdToast, $eventStore){
 
 	function setLatestMatch(reset){
 		if(reset){
-			pageLimit = $scope.latestMatches.length || pageLimit; // : $scope.latestMatches.length;
+			pageLimit = 20; // : $scope.latestMatches.length;
 			pageSkip = 0;
 		}
 
@@ -104,6 +104,7 @@ app.controller('MatchCtrl', function($scope, $mdToast, $eventStore){
 
 			$scope.$apply(function(){
 				$scope.latestMatches.push.apply($scope.latestMatches, data.rows);
+				console.log($scope.latestMatches);
 				$scope.totalMatches = data.total_rows;
 				$scope.showLoadMoreButton = data.total_rows > $scope.latestMatches.length;
 
