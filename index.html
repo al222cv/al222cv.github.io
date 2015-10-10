@@ -155,6 +155,21 @@
 						          <h3>{{::match.doc.winner }}</h3>
 						          <p>{{::match.doc._id | date:'EEE dd MMMM, HH:mm'}}</p>
 						        </div>
+						        <md-menu md-position-mode="target-right target" >
+						          <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
+						            <md-icon md-menu-origin> more_vert </md-icon>
+						          </md-button>
+						          <md-menu-content width="4" >
+						            <md-menu-item>
+						              <md-button ng-click="deleteMatch(match.doc)">
+						                  <div layout="row">
+						                    <p flex>Ta bort match</p>
+						                    <md-icon md-menu-align-targetstyle="margin: auto 3px auto 0;"> delete </md-icon>
+						                  </div>
+						              </md-button>
+						            </md-menu-item>
+						          </md-menu-content>
+						        </md-menu>
 						    </md-list-item>
 						</md-list>
 					</md-card-content>

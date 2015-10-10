@@ -32,10 +32,19 @@ app.controller('MatchCtrl', function($scope, $mdToast, $eventStore){
 	  live: true,
 	  include_docs: true
 	}).on('change', function(change) {
-		if(change.doc.type != 'matchPlayedEvent') return;
-
+		//reload score
 		setScore();
 		setLatestMatch();
+
+		//show message
+		var message =  change.deleted ? 'Match borttagen!' : 'Match sparad, ' +  change.doc.winner  + ' vinnare!'
+		var toast = $mdToast.simple()
+		            .content(message)
+		            .hideDelay(3000)
+		            .highlightAction(true)
+		            .position('bottom right');
+	    
+		$mdToast.show(toast);
 	});
 
 	$scope.newMatch = function(player){
@@ -44,28 +53,12 @@ app.controller('MatchCtrl', function($scope, $mdToast, $eventStore){
 			winner: player
 		};
 
-		$eventStore.save('matchPlayedEvent', eventData)
-		.then(function (response) {
-			var toast = $mdToast.simple()
-			            .content('Match sparad, ' +  player  + ' vinnare!')
-			            //.action('Ångra')
-			            .hideDelay(5000)
-			            .highlightAction(true)
-			            .position('bottom right');
-		    
-			$mdToast.show(toast).then(function(response) {
-				if(response == 'ok'){
-
-		    	}
-			});	
-		}).catch(function (err) {
-			console.log(err);
-		});
+		$eventStore.save('matchPlayedEvent', eventData);
 	};
 
-	$scope.range = function(n) {
-        return new Array(n);
-    };
+	$scope.deleteMatch = function(doc){
+		remoteDb.remove(doc);
+	};
 
 	function setScore(){
 		remoteDb.query('sumByWinner',{key: 'Andreas',reduce: true}).then(function(data){
@@ -89,10 +82,6 @@ app.controller('MatchCtrl', function($scope, $mdToast, $eventStore){
 			$scope.$apply(function(){
 				$scope.latestMatches = data.rows;
 				$scope.fiveLatestMatches = data.rows.slice(0,5).reverse();
-				// $scope.fiveLatestMatches = [
-				// 	{ count: latestFive.filter(function(m){ return m.doc.winner == 'Andreas' }).length },
-				// 	{ count: latestFive.filter(function(m){ return m.doc.winner == 'Mikael' }).length }
-				// ]				
 			});
 		});
 	}
